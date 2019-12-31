@@ -17,7 +17,7 @@ class HomeTest extends TestCase
     {
         $response = $this->get('/');
 
-        $response->assertSeeText('Welcome to Laravel');
+        $response->assertSeeText('Stoic');
     }
 
 
