@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\BlogPost;
 use App\Http\Requests\StorePost;
 use Illuminate\Http\Request;
+use App\Comment;
 
 class PostController extends Controller
 {
@@ -15,7 +16,7 @@ class PostController extends Controller
      */
     public function index()
     {
-       return view('posts.index',['posts' => BlogPost::all()]);
+       return view('posts.index',['posts' => BlogPost::withCount('comments')->get()]);
     }
 
     /**
@@ -53,7 +54,7 @@ class PostController extends Controller
     public function show($id)
     {
         //
-        return view('posts.show',['post' => BlogPost::findOrFail($id)]);
+        return view('posts.show',['post' => BlogPost::with('comments')->findOrFail($id)]);
     }
 
     /**

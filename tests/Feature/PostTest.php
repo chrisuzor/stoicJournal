@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\BlogPost;
+use App\Comment;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -91,13 +92,23 @@ class PostTest extends TestCase
         $this->assertEquals(session('status'),'Blog Post was deleted');
         $this->assertDatabaseMissing('blog_posts',$post->toArray());
     }
+    public function testPostWithComments(){
+        $post = $this->createDummyPost();
 
+        factory(Comment::class, 4)->create([
+            'blog_post_id' => $post->id
+        ]);
+
+        $response = $this->get('/posts');
+        $response->assertSeeText('4 comments');
+    }
     private function createDummyPost(): BlogPost{
-        $post = new BlogPost();
+    /**    $post = new BlogPost();
         $post->title = 'New Title';
         $post->content = 'Content of Blog Post';
         $post->save();
-
         return $post;
+**/
+        return factory(BlogPost::class)->states('new-title')->create();
     }
 }
